@@ -14,17 +14,21 @@ public class CorsConfig {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
         
-        // Allow all origins for development
-        config.addAllowedOrigin("http://localhost:5173");
+        // Allow frontend domains
+        config.addAllowedOrigin("http://localhost:5173"); // Local development
+        config.addAllowedOrigin("https://ai-board-front-efknttpuj-amirbekais-projects.vercel.app"); // Vercel deployment
         
-        // Allow all HTTP methods (GET, POST, PUT, DELETE, etc.)
+        // Allow all HTTP methods
         config.addAllowedMethod("*");
         
         // Allow all headers
         config.addAllowedHeader("*");
         
-        // Allow credentials (cookies, authorization headers, etc.)
+        // Allow credentials
         config.setAllowCredentials(true);
+        
+        // Set max age for preflight requests
+        config.setMaxAge(3600L);
         
         source.registerCorsConfiguration("/**", config);
         return new CorsFilter(source);

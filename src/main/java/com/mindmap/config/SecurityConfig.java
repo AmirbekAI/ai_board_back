@@ -36,9 +36,11 @@ public class SecurityConfig {
             .cors(cors -> cors.configurationSource(request -> {
                 CorsConfiguration config = new CorsConfiguration();
                 config.addAllowedOrigin("http://localhost:5173");
+                config.addAllowedOrigin("https://ai-board-front-efknttpuj-amirbekais-projects.vercel.app");
                 config.addAllowedMethod("*");
                 config.addAllowedHeader("*");
                 config.setAllowCredentials(true);
+                config.setMaxAge(3600L);
                 return config;
             }))
             .csrf(csrf -> csrf.disable())
