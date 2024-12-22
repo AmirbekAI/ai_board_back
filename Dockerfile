@@ -2,7 +2,8 @@
 FROM gradle:8.5-jdk21 AS build
 WORKDIR /app
 COPY . .
-RUN gradle build --no-daemon
+RUN chmod +x ./gradlew
+RUN ./gradlew build --no-daemon --stacktrace --info -x test
 
 # Run stage
 FROM eclipse-temurin:21-jre-jammy
