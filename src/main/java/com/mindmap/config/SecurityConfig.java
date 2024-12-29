@@ -35,7 +35,7 @@ public class SecurityConfig {
             .cors(Customizer.withDefaults())
             .csrf(AbstractHttpConfigurer::disable)
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/auth/**").permitAll()
+                .requestMatchers("/api/auth/**", "/auth/**").permitAll()
                 .anyRequest().authenticated()
             )
             .sessionManagement(session -> session
