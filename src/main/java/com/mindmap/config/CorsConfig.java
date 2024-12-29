@@ -5,12 +5,14 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.util.Arrays;
 import java.util.List;
 
 @Configuration
-public class CorsConfig {
+public class CorsConfig implements WebMvcConfigurer {
 
     private static final List<String> ALLOWED_ORIGINS = Arrays.asList(
         "http://localhost:5173",
@@ -28,26 +30,27 @@ public class CorsConfig {
     );
 
     @Bean
-    public CorsFilter corsFilter() {
+    public org.springframework.web.filter.CorsFilter corsFilter() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
 
-        // Allow specified origins
         ALLOWED_ORIGINS.forEach(config::addAllowedOrigin);
-        
-        // Allow specified methods
         ALLOWED_METHODS.forEach(config::addAllowedMethod);
-        
-        // Allow specified headers
         ALLOWED_HEADERS.forEach(config::addAllowedHeader);
         
-        // Don't allow credentials since we're using JWT
         config.setAllowCredentials(false);
-        
-        // Cache preflight response for 1 hour
         config.setMaxAge(3600L);
 
         source.registerCorsConfiguration("/**", config);
-        return new CorsFilter(source);
+        return new org.springframework.web.filter.CorsFilter(source);
+    }
+
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**")
+            .allowedOrigins(ALLOWED_ORIGINS.toArray(new String[0]))
+            .allowedMethods(ALLOWED_METHODS.toArray(new String[0]))
+            .allowedHeaders(ALLOWED_HEADERS.toArray(new String[0]))
+            .maxAge(3600);
     }
 } 
